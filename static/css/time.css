@@ -1,0 +1,247 @@
+@import url('https://fonts.cdnfonts.com/css/digital-numbers');
+.wall-clock {
+  /* Initial value */
+/*   --time: calc((60 * 60 * 3) + (60 * 47) + 6);  */
+  --time: 0;
+  /* starts from 00:00:00 am in seconds */
+  --time-plus: var(--time);
+  /*  Settings  */
+  --clock-size: 300px;
+  --clock-border-width: calc(0.025 * var(--clock-size));
+  --clock-rounded-size: calc(0.2 * var(--clock-size));
+  --color-light: #f0f0f030;
+  --color-shadow: #00000030;
+  --clock-hand-width: calc(0.05 * var(--clock-size));
+  --clock-hand-second-color: #ee2222;
+  background-color: inherit;
+  display: block;
+  position: relative;
+  min-width: var(--clock-size); /* Size won't relative to body size */
+  width: var(--clock-size);
+  height: var(--clock-size);
+  border: var(--clock-border-width) solid white;
+  padding: calc(0.025 * var(--clock-size));
+  box-sizing: border-box;
+  box-shadow: 
+    calc(-1 * var(--clock-border-width)) calc(-1 * var(--clock-border-width)) calc(3 * var(--clock-border-width)) var(--color-light),
+    inset calc(-1 * var(--clock-border-width)) calc(-1 * var(--clock-border-width)) calc(3 * var(--clock-border-width)) var(--color-light),
+    calc(1 * var(--clock-border-width)) calc(1 * var(--clock-border-width)) calc(3 * var(--clock-border-width)) var(--color-shadow),
+    inset calc(1 * var(--clock-border-width)) calc(1 * var(--clock-border-width)) calc(3 * var(--clock-border-width)) var(--color-shadow);
+  
+  /* Centering clock content */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wall-clock.rounded {
+  border-radius: var(--clock-rounded-size);
+}
+.wall-clock.circle {
+  border-radius: var(--clock-size);
+}
+/* Centering the clock */
+body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+/* The center point */
+.wall-clock::after {
+  content: '';
+  position: absolute;
+  width: var(--clock-hand-width);
+  height: var(--clock-hand-width);
+  box-sizing: border-box;
+  border: calc(0.25 * var(--clock-hand-width)) solid var(--clock-hand-second-color);
+  border-radius: 50%;
+  background-color: inherit;
+}
+
+/* Clock nums */
+.wall-clock-nums {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  font-family: "Lucida Console", "Courier New", monospace;
+  font-weight: bold;
+}
+.wall-clock-nums [num] {
+  --num-degree-pos: 0deg; /* for num 12 */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: rotate(var(--num-degree-pos));
+/*   background-color: blue; */
+}
+.wall-clock-nums [num]::before {
+  content: attr(num);
+  line-height: calc(0.1 * var(--clock-size));
+  font-size: calc(0.1 * var(--clock-size));
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: calc(0.1 * var(--clock-size));
+  heigth: calc(0.1 * var(--clock-size));
+  text-align: center;
+  transform: translateX(-50%) rotate(calc(-1 * var(--num-degree-pos)));
+}
+.wall-clock-nums [num]:not(.numeric)::before {
+  --num-degree-pos: 0deg;
+  content: '';
+  background-color: var(--text-color);
+  width: calc(0.007 * var(--clock-size));
+  height: calc(0.05 * var(--clock-size));
+}
+.wall-clock-nums [num$=".5"]:not(.numeric)::before {
+  width: calc(0.001 * var(--clock-size));
+  height: calc(0.025 * var(--clock-size));
+}
+.wall-clock-nums [num="12.5"] {--num-degree-pos: 15deg;}
+.wall-clock-nums [num="1"] {--num-degree-pos: 30deg;}
+.wall-clock-nums [num="1.5"] {--num-degree-pos: 45deg;}
+.wall-clock-nums [num="2"] {--num-degree-pos: 60deg;}
+.wall-clock-nums [num="2.5"] {--num-degree-pos: 75deg;}
+.wall-clock-nums [num="3"] {--num-degree-pos: 90deg;}
+.wall-clock-nums [num="3.5"] {--num-degree-pos: 105deg;}
+.wall-clock-nums [num="4"] {--num-degree-pos: 120deg;}
+.wall-clock-nums [num="4.5"] {--num-degree-pos: 135deg;}
+.wall-clock-nums [num="5"] {--num-degree-pos: 150deg;}
+.wall-clock-nums [num="5.5"] {--num-degree-pos: 165deg;}
+.wall-clock-nums [num="6"] {--num-degree-pos: 180deg;}
+.wall-clock-nums [num="6.5"] {--num-degree-pos: 195deg;}
+.wall-clock-nums [num="7"] {--num-degree-pos: 210deg;}
+.wall-clock-nums [num="7.5"] {--num-degree-pos: 225deg;}
+.wall-clock-nums [num="8"] {--num-degree-pos: 240deg;}
+.wall-clock-nums [num="8.5"] {--num-degree-pos: 255deg;}
+.wall-clock-nums [num="9"] {--num-degree-pos: 270deg;}
+.wall-clock-nums [num="9.5"] {--num-degree-pos: 285deg;}
+.wall-clock-nums [num="10"] {--num-degree-pos: 300deg;}
+.wall-clock-nums [num="10.5"] {--num-degree-pos: 315deg;}
+.wall-clock-nums [num="11"] {--num-degree-pos: 330deg;}
+.wall-clock-nums [num="11.5"] {--num-degree-pos: 345deg;}
+
+/* Clock hands */
+.wall-clock-hands,
+.wall-clock-hands > *,
+.wall-clock-hands > *::before {
+  position: absolute;
+  box-shadow: 0 0 var(--clock-border-width) var(--color-shadow);
+}
+.wall-clock-hands > * {
+  --hand-rotate-deg-func: 6deg; /* for second */
+  transform : rotate(calc(var(--hand-rotate-deg-func) * var(--time)));
+}
+
+.wall-clock-hands__hour::before {
+  content: '';
+  height: calc(0.3 * var(--clock-size));
+  width: calc(0.75 * var(--clock-hand-width));
+  background-color: var(--text-color);
+  border-radius: var(--clock-hand-width);
+  transform: translate(-50%, -100%);
+}
+.wall-clock-hands__minute::before {
+  content: '';
+  height: calc(0.4 * var(--clock-size));
+  width: calc(0.5 * var(--clock-hand-width));
+  background-color: var(--text-color);
+  border-radius: var(--clock-hand-width);
+  transform: translate(-50%, -100%);
+}
+.wall-clock-hands__second::before {
+  content: '';
+  height: calc(0.5 * var(--clock-size));
+  width: calc(0.25 * var(--clock-hand-width));
+  background-color: var(--clock-hand-second-color);
+  border-radius: var(--clock-hand-width);
+  transform: translate(-50%, calc(-0.43 * var(--clock-size)));
+}
+.wall-clock-hands__hour {
+  --hand-rotate-deg-func: calc(6deg / 60 / 12);
+}
+.wall-clock-hands__minute {
+  --hand-rotate-deg-func: calc(6deg / 60);
+}
+.wall-clock-hands__second {
+  --hand-rotate-deg-func: 6deg;
+}
+
+/* Animation */
+.wall-clock.animate .wall-clock-hands > * {
+  animation: clock-time calc(1s * (12 * 60 * 60)) linear infinite;
+}
+@keyframes clock-time {
+  to {
+    transform : rotate(calc(var(--hand-rotate-deg-func) * (var(--time) + (12 * 60 * 60))));
+  }
+}
+
+body{
+  --bg-color: #eee;
+  --text-color: #222;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+}
+.darkMode-toggler {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+}
+
+/* Theme mode */
+body[dark]{
+  --bg-color: #222;
+  --text-color: #fff;
+}
+/* [dark] .wall-clock,
+.wall-clock[dark]{
+  --color-light: #808080;
+  --color-shadow: #090909;
+} */
+
+/* CLOCK */
+.digital-clock { 
+  font-family: 'Digital Numbers', sans-serif;
+  margin: 30px 0;
+  padding: 8px 16px;
+  background-color: #0009;
+  color: #fff;
+  display: flex;
+  --corner:10px;
+  clip-path: polygon(
+    0 var(--corner),
+    var(--corner) 0,
+    calc(100% - var(--corner)) 0,
+    100% var(--corner),
+    100% calc(100% - var(--corner)),
+    calc(100% - var(--corner)) 100%,
+    var(--corner) 100%,
+    0% calc(100% - var(--corner)),
+    0% var(--corner)
+  );
+}
+.digital-clock > * {
+  position: relative;
+}
+.digital-clock p {
+  font-size: 36px;
+  position: relative;
+  margin: 0;
+  z-index: 100;
+}
+.digital-clock p.placeholder {
+  color: #fff2;
+  z-index: 50;
+}
+.digital-clock .numbers :not(.placeholder) {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+/*END CLOCK*/

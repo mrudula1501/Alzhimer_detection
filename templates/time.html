@@ -1,0 +1,376 @@
+<head>
+  <meta http-equiv="refresh" content="30">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Blank</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="static/css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+<link href="static/css/time.css" rel="stylesheet" type="text/css">
+<!--form class="user" action="" method="post" enctype="multipart/form-data"-->
+
+<div class="wall-clock circle">
+    <div class="wall-clock-nums">
+      <span num="12" class="numeric"></span>
+      <span num="12.5"></span>
+      <span num="1"></span>
+      <span num="1.5"></span>
+      <span num="2"></span>
+      <span num="2.5"></span>
+      <span num="3" class="numeric"></span>
+      <span num="3.5"></span>
+      <span num="4"></span>
+      <span num="4.5"></span>
+      <span num="5"></span>
+      <span num="5.5"></span>
+      <span num="6" class="numeric"></span>
+      <span num="6.5"></span>
+      <span num="7"></span>
+      <span num="7.5"></span>
+      <span num="8"></span>
+      <span num="8.5"></span>
+      <span num="9" class="numeric"></span>
+      <span num="9.5"></span>
+      <span num="10"></span>
+      <span num="10.5"></span>
+      <span num="11"></span>
+      <span num="11.5"></span>
+    </div>
+    <div class="wall-clock-hands">
+      <span class="wall-clock-hands__hour" name="hour"></span>
+      <span class="wall-clock-hands__minute" name="minute"></span>
+      <span class="wall-clock-hands__second" name="sec"></span>
+    </div>
+  </div>
+  
+  <div class="digital-clock">
+    <!-- HOUR -->
+    <div class="numbers">
+      <p class="hours">1</p>
+      <p class="placeholder">88</p>
+    </div>
+    <div class="colon">
+      <p>:</p>
+    </div>
+    <!-- MINUTE -->
+    <div class="numbers">
+      <p class="minutes">4</p>
+      <p class="placeholder">88</p>
+    </div>
+    <div class="colon">
+      <p>:</p>
+    </div>
+    <!-- SECOND -->
+    <div class="numbers">
+      <p class="seconds">02</p>
+      <p class="placeholder">88</p>
+    </div>
+  </div>
+
+<!--/form-->
+
+            <!-- Nav Item - Dashboard -->
+            <!--li class="nav-item"-->
+                <a class="nav-link" href="home">
+                    <i class="fas fa-fw fa-home"></i>
+                    <span>Home</span></a>
+            </li>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded',() => {
+  const themeToggler = document.createElement('input');
+  themeToggler.type = 'checkbox';
+  themeToggler.title = 'Toggle dark mode';
+  themeToggler.classList.add('darkMode-toggler');
+  themeToggler.onclick = () => {
+    if (themeToggler.checked) {
+      document.body.setAttribute('dark',true);
+    } else {
+      document.body.removeAttribute('dark'); 
+    }
+  };
+  document.body.appendChild(themeToggler);
+  
+  
+  const d = new Date();
+  let h = (d.getHours()%12)*60*60; // in 12 format hours
+  let m = d.getMinutes()*60;
+  let s = d.getSeconds();
+  let time = h + m  + s; // in seconds with 12 hours format
+  //document.querySelector('.wall-clock').style.setProperty('--time',time);
+  const clock = {
+    time: 0,
+    targetEl: null,
+    init:()=>{
+      clock.targetEl = document.querySelector('.wall-clock');
+      
+      clock.setNow();
+    },
+    setNow:()=>{
+      const d = new Date();
+      let h = (d.getHours()%12)*60*60; // in 12 format hours
+      let m = d.getMinutes()*60;
+      let s = d.getSeconds();
+      let time = h + m  + s; // in seconds with 12 hours format
+      
+      clock.setTime(time);
+    },
+    setTime:(time)=>{
+      if(time!=undefined){
+        clock.time = time;
+      }
+      
+      if(clock.targetEl) clock.targetEl.style.setProperty('--time',clock.time);
+    },
+    setSeconds:(seconds)=>{
+      if(seconds!=undefined){
+        let newTime = clock.time - clock.time%60;
+        newTime = newTime + seconds;
+        
+        clock.setTime(newTime);
+        document.querySelector('.digital-clock .seconds').innerText = seconds == 60?0:seconds;
+      }
+    },
+    setMinutes:(minutes)=>{
+      if(minutes!=undefined){
+        let seconds = clock.time%60;
+        let newTimes = clock.time - clock.time%(60*60);
+        newTimes = newTimes + minutes * 60;
+        newTimes = newTimes + seconds;
+        
+        clock.setTime(newTimes);
+        document.querySelector('.digital-clock .minutes').innerText = minutes == 60?0:minutes;
+      }
+    },
+    setHours:(hours)=>{
+      if(hours!=undefined){
+        let minutes = clock.time%(60*60);
+        let newTimes = (hours * 60 * 60) + minutes;
+        
+        clock.setTime(newTimes);
+        document.querySelector('.digital-clock .hours').innerText = hours == 12?0:hours;
+      }
+    }
+  }
+  
+  // initiate wall clock
+  clock.init();
+  
+  const hands_hour = document.querySelector('.wall-clock-hands__hour');
+  const hands_minute = document.querySelector('.wall-clock-hands__minute');
+  const hands_second = document.querySelector('.wall-clock-hands__second');
+  const hour_rotator = new Rotator(hands_hour, 30, {
+    onRotate: (angle) => {
+      let hour = Math.floor(angle/30);
+      if (hour === 12) hour = 0;
+      
+      clock.setHours(hour);
+      
+    }
+  });
+  const minute_rotator = new Rotator(hands_minute, 6, {
+    onRotate: (angle) => {
+      let minute = Math.floor(angle/6);
+      if (minute === 60) minute = 0;
+      
+      clock.setMinutes(minute);
+      
+    }
+  });
+  const second_rotator = new Rotator(hands_second, 6, {
+    onRotate: (angle) => {
+      let second = Math.floor(angle/6);
+      if (second === 60) second = 0;
+      
+      clock.setSeconds(second);
+      
+    }
+  });
+  
+});
+
+
+/**
+ * Author: Mario
+ * 
+ * Rotator Class
+ * Use to rotate DOM Object
+ * 
+ * Example usage :
+ *
+ * const hands_hour = document.querySelector('.wall-clock-hands__hour');
+ * const hands_minute = document.querySelector('.wall-clock-hands__minute');
+ * const hands_second = document.querySelector('.wall-clock-hands__second');
+ *
+ * const hour_rotator = new Rotator(hands_hour_el, 30, {
+ *   onRotate: (angle) => {
+ *     let hour = Math.floor(angle/30);
+ *     if (hour === 12) hour = 0;
+ *
+ *     console.log('jam', hour);
+ *   }
+ * });
+ * const minute_rotator = new Rotator(hands_minute, 6, {
+ *   onRotate: (angle) => {
+ *     let minute = Math.floor(angle/6);
+ *     if (minute === 60) minute = 0;
+ *
+ *     console.log('menit', minute);
+ *   }
+ * });
+ * const second_rotator = new Rotator(hands_second, 6, {
+ *   onRotate: (angle) => {
+ *     let second = Math.floor(angle/6);
+ *     if (second === 60) second = 0;
+ *
+ *     console.log('detik', second);
+ *   }
+ * });
+ */
+class Rotator {
+  target;
+  isDragging = false;
+  targetCenter;
+  #angle;
+  angleSnap;
+  onRotateEnd;
+  onRotate;
+  constructor(target,angleSnap=1,options={}) {
+    this.target = target;
+    this.angleSnap = angleSnap;
+    this.targetCenter = () => {
+      let boxBoundingRect = target.getBoundingClientRect();
+      return {
+        // x: boxBoundingRect.left + boxBoundingRect.width/2, // for center x
+        x: boxBoundingRect.left, 
+        // y: boxBoundingRect.top + boxBoundingRect.height/2, // for center y
+        y: boxBoundingRect.top
+      };
+    };
+    
+    if (options && options.onRotate) this.onRotate = options.onRotate;
+    if (options && options.onRotateEnd) this.onRotateEnd = options.onRotateEnd;
+    
+    this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.handleMouseUp = this.handleMouseUp.bind(this);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.getAngle = this.getAngle.bind(this);
+    
+    this.#angle = this.getAngle();
+    
+    this.init();
+  }
+  init(){
+    this.target.style.cursor = 'pointer';
+    this.target.addEventListener('mousedown',this.handleMouseDown);
+    this.target.addEventListener('touchstart',this.handleMouseDown)
+    
+    if (this.onRotate) this.onRotate(this.#angle);
+  }
+  handleMouseDown(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    document.removeEventListener('mousemove', this.handleMouseMove);
+    document.removeEventListener('mouseup', this.handleMouseUp);
+    document.removeEventListener('touchmove', this.handleMouseMove);
+    document.removeEventListener('touchend', this.handleMouseUp);
+    
+    document.addEventListener('mousemove', this.handleMouseMove);
+    document.addEventListener('mouseup', this.handleMouseUp);
+    document.addEventListener('touchmove', this.handleMouseMove);
+    document.addEventListener('touchend', this.handleMouseUp);
+    
+    this.isDragging = true;
+  }
+  handleMouseUp(e) {
+    e.stopPropagation();
+    e.type === 'mouseup' && e.preventDefault();
+    document.removeEventListener('mousemove', this.handleMouseMove);
+    document.removeEventListener('mouseup', this.handleMouseUp);
+    document.removeEventListener('touchmove', this.handleMouseMove);
+    document.removeEventListener('touchend', this.handleMouseUp);
+    
+    this.target.style.transform = null;
+    this.isDragging = false;
+    if (this.onRotateEnd) this.onRotateEnd(this.#angle);
+  }
+  handleMouseMove(e) {
+    e.stopPropagation();
+    e.type === 'mousemove' && e.preventDefault();
+    if (this.isDragging) {
+      let angle = Math.atan2((e.pageX || e.touches[0].pageX) - this.targetCenter().x, - ((e.pageY || e.touches[0].pageY) - this.targetCenter().y) )*(180 / Math.PI);
+      if (angle < 0) {
+        angle = 360 + angle;
+      }
+      angle = Math.round(angle/this.angleSnap) * this.angleSnap;
+      this.target.style.transform = `rotate(${angle}deg)`;
+      if (this.#angle != angle) {
+        this.#angle = angle;
+        if (this.onRotate) this.onRotate(this.#angle);
+      }
+    }
+  }
+  getAngle() {
+    let angle = 0;
+    let tmatrix = window.getComputedStyle(this.target).transform;
+    if (tmatrix && tmatrix != 'none') {
+      let matrixValues = tmatrix.split('(')[1].split(')')[0].split(',');
+      let matrix_a = matrixValues[0];
+      let matrix_b = matrixValues[1];
+      let rotationInRadians = Math.atan2(matrix_b, matrix_a);
+      angle = parseInt(rotationInRadians * (180 / Math.PI));
+      if (angle < 0) {
+        angle = 360 + angle;
+      }
+    }
+    return angle;
+  };
+}
+
+  </script>
+
+
+
+<form class="user" action="" method="post" enctype="multipart/form-data">
+  <div class="row">
+  <div class="form-group">
+      <label for="hour">Hour:</label>
+      <input type="number" class="form-control" id="hour" name="hour" min="0" max="23" value="{{ hour }}">
+  </div>
+  <div class="form-group">
+      <label for="minute">Minute:</label>
+      <input type="number" class="form-control" id="minute" name="minute" min="0" max="59" value="{{ minute }}">
+  </div>
+  <div class="form-group">
+      <label for="sec">Second:</label>
+      <input type="number" class="form-control" id="sec" name="sec" min="0" max="59" value="{{ sec }}">
+  </div>
+</div>
+  <button class="btn btn-primary btn-user btn-block">
+    Set
+</button>
+</form>
+
+<!--script>
+  // Set default values for hour, minute, and second based on the current time
+  document.addEventListener('DOMContentLoaded', function() {
+      var now = new Date();
+      document.getElementById('hour').value = now.getHours();
+      document.getElementById('minute').value = now.getMinutes();
+      document.getElementById('sec').value = now.getSeconds();
+  });
+</script-->
